@@ -1,21 +1,16 @@
-var axios = require('axios');
+var AWS = require('aws-sdk');
 
-if (process.argv.length <= 2) {
-    console.log("Usage: " + __filename + " URL");
+// you shouldn't hardcode your keys in production! See http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html
+AWS.config.update({accessKeyId: process.env.AWS_ACCESS_KEY_ID, secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY, region: process.env.AWS_REGION});
+
+var lambda = new AWS.Lambda();
+var params = {
+  FunctionName: 'concourse-serverless-dev-sendMessage', /* required */
+};
+lambda.invoke(params, function(err, data) {
+  if (err) {
+    console.log(err, err.stack);
     process.exit(-1);
-}
-
-var url = process.argv[2]
-
-axios.get(url)
-  .then(function (response) {
-    console.log("Got response: " + response.status);
-    console.log("Got data: " + response.data);
-    if ( response.data != "Hello World\n") {
-      process.exit(-1);
-    }
-  })
-  .catch(function (error) {
-    console.log(error);
-    process.exit(-1);
-  });
+  }  // an error occurred
+  else     console.log(data);           // successful response
+});
