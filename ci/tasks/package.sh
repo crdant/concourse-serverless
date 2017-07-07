@@ -61,3 +61,4 @@ echo "service: ${service}"
 
 echo "mv ${outputDir}/${service}.zip ${outputDir}/${service}-${version}.zip"
 mv ${outputDir}/${service}.zip ${outputDir}/${service}-${version}.zip
+ls ${outputDir}
