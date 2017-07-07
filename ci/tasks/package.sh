@@ -47,11 +47,14 @@ fi
 
 version=`cat $versionFile`
 
+working_dir=`pwd`
 cd $inputDir
 npm install
 
 echo Packaging service...
-node ./node_modules/serverless/bin/serverless package --package ../${outputDir}
+node ./node_modules/serverless/bin/serverless package --package ${working_dir}/${outputDir}
+cd ${working_dir}
+
 package=`find ${outputDir} -name '*.zip'`
 service=`basename ${package} | cut  -f 1 -d '.'`
 
