@@ -1,6 +1,6 @@
 #!/bin/sh
 
-inputDir=  outputDir=  versionFile=
+inputDir=  outputDir=  versionFile= service=
 
 while [ $# -gt 0 ]; do
   case $1 in
@@ -46,3 +46,7 @@ npm install
 
 echo Packaging service...
 node ./node_modules/serverless/bin/serverless package --package ${outputDir}
+package=`find ${outputDir} -name '*.zip'`
+service=`basename ${package} | cut  -f 1 -d '.'`
+
+mv ${outputDir}/${service}.zip ${outputDir}/${service}-${version}.zip

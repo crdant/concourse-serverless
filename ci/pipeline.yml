@@ -41,6 +41,6 @@ jobs:
       - task: unit-test
         file: source/ci/tasks/unit.yml
       - put: candidate-release
-        params: { file: package/((application))-*.tgz }
+        params: { file: package/((application))-*.zip }
       - put: version
         params: { file: version/number }
