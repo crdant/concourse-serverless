@@ -20,6 +20,7 @@ service: concourse-serverless
 provider:
   name: aws
   runtime: nodejs6.10
+  region: ${env:AWS_REGION}
 
 # you can overwrite defaults here
 #  stage: dev
