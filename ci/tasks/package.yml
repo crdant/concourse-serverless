@@ -7,6 +7,13 @@ image_resource:
     repository: node
     tag: boron
 
+params:
+  aws_access_key_id:
+  aws_secret_access_key:
+  aws_region:
+  twillio_auth_token:
+  twillio_account_sid:
+
 inputs:
   - name: source
   - name: version

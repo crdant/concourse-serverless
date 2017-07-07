@@ -2,6 +2,12 @@
 
 inputDir=  outputDir=  versionFile= service=
 
+AWS_ACCESS_KEY_ID=$aws-access-key-id
+AWS_SECRET_ACCESS_KEY=$aws-secret-access-key
+AWS_REGION=$aws-region
+TWILIO_AUTH_TOKEN=$twillio-auth-token
+TWILIO_ACCOUNT_SID=$twillio-account-sid
+
 while [ $# -gt 0 ]; do
   case $1 in
     -i | --input-dir )
