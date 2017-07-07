@@ -15,11 +15,9 @@ outputs:
   - name: package
 
 run:
-  path: source/ci/tasks/install.sh
+  path: source/ci/tasks/package.sh
   args: [
     --input-dir, source,
     --output-dir, package,
-    --version-file, version/number,
-    --artifactId, hello-node,
-    --packaging, tgz
+    --version-file, version/number
   ]

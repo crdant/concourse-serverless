@@ -1,6 +1,6 @@
 #!/bin/sh
 
-inputDir=  outputDir=  versionFile=  artifactId=  packaging=
+inputDir=  outputDir=  versionFile=
 
 while [ $# -gt 0 ]; do
   case $1 in
@@ -14,14 +14,6 @@ while [ $# -gt 0 ]; do
       ;;
     -v | --version-file )
       versionFile=$2
-      shift
-      ;;
-    -a | --artifactId )
-      artifactId=$2
-      shift
-      ;;
-    -p | --packaging )
-      packaging=$2
       shift
       ;;
     * )
@@ -46,18 +38,11 @@ fi
 if [ ! -f "$versionFile" ]; then
   error_and_exit "missing version file: $versionFile"
 fi
-if [ -z "$artifactId" ]; then
-  error_and_exit "missing artifactId!"
-fi
-if [ -z "$packaging" ]; then
-  error_and_exit "missing packaging!"
-fi
 
 version=`cat $versionFile`
-artifactName="${artifactId}-${version}.${packaging}"
 
 cd $inputDir
 npm install
 
-echo Creating tarball...
-tar -czf ../$outputDir/$artifactName *.js package.json node_modules
+echo Packaging service...
+node ./node_modules/serverless/bin/serverless package --package ${outputDir}

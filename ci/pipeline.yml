@@ -36,8 +36,8 @@ jobs:
         trigger: true
       - get: version
         params: { pre: rc }
-      - task: install
-        file: source/ci/tasks/install.yml
+      - task: package
+        file: source/ci/tasks/package.yml
       - task: unit-test
         file: source/ci/tasks/unit.yml
       - put: candidate-release
