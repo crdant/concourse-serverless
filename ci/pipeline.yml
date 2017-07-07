@@ -44,8 +44,8 @@ jobs:
           aws_access_key_id: ((aws-access-key-id))
           aws_secret_access_key: ((aws-secret-access-key))
           aws_region: ((aws-region))
-          twillio_auth_token: ((twillio-auth-token))
-          twillio_account_sid: ((twillio-account-sid))
+          twilio_auth_token: ((twilio-auth-token))
+          twilio_account_sid: ((twilio-account-sid))
       - put: candidate-release
         params: { file: package/((application))-*.zip }
       - put: version
