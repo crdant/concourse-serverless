@@ -51,16 +51,8 @@ cd $inputDir
 npm install
 
 echo Packaging service...
-echo node ./node_modules/serverless/bin/serverless package --package ${outputDir}
-node ./node_modules/serverless/bin/serverless package --package ${outputDir}
-ls ${outputDir}
+node ./node_modules/serverless/bin/serverless package --package ../${outputDir}
 package=`find ${outputDir} -name '*.zip'`
-echo "package: ${package}"
 service=`basename ${package} | cut  -f 1 -d '.'`
-echo "service: ${service}"
 
-echo "mv ${outputDir}/${service}.zip ${outputDir}/${service}-${version}.zip"
 mv ${outputDir}/${service}.zip ${outputDir}/${service}-${version}.zip
-pwd
-ls
-ls ${outputDir}
