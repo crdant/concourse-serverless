@@ -3,7 +3,7 @@
   "description": "A simple lambda service using sererless to deploy with concourse",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha test/test.js",
-    "integration": "node test/integration.js",
+    "integration": "node test/integration.js"
   },
   "version": "1.0.0",
   "devDependencies": {
