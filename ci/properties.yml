@@ -3,6 +3,6 @@ github-uri: "https://github.com/crdant/concourse-serverless"
 github-branch: master
 aws-region: "us-west-2"
 s3-endpoint: s3-us-west-2.amazonaws.com
-s3-bucket-version: hello-node-releases
-s3-bucket-releases: hello-node-releases
-s3-bucket-release-candidates: hello-node-release-candidates
+s3-bucket-version: concourse-serverless-releases
+s3-bucket-releases: concourse-serverless-releases
+s3-bucket-release-candidates: concourse-serverless-release-candidates
