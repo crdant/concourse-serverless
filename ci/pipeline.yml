@@ -1,32 +1,4 @@
-resources:
-  - name: source
-    type: git
-    source:
-      uri: ((github-uri))
-      branch: ((github-branch))
-
-  - name: version
-    type: semver
-    source:
-      bucket: ((s3-bucket-version))
-      initial_version: 1.0.0-rc.0
-      key: current-version
-      access_key_id: ((aws-access-key-id))
-      secret_access_key: ((aws-secret-access-key))
-      region_name: ((aws-region))
-      endpoint: ((s3-endpoint))
-      sse-kms-key-id: ((s3-sse-kms-key-id))
-
-  - name: candidate-release
-    type: s3
-    source:
-      bucket: ((s3-bucket-release-candidates))
-      regexp: ((application))-(.*).zip
-      access_key_id: ((aws-access-key-id))
-      secret_access_key: ((aws-secret-access-key))
-      region_name: ((aws-region))
-      endpoint: ((s3-endpoint))
-      sse-kms-key-id: ((s3-sse-kms-key-id))
+# TO DO: add a working directory option that enables a static copy of the source to be available to the entire pipeline
 
 jobs:
   - name: build
@@ -68,3 +40,33 @@ jobs:
           stage: integration
       # - task: integration-test
       #   file: source/ci/tasks/integration.yml
+
+resources:
+  - name: source
+    type: git
+    source:
+      uri: ((github-uri))
+      branch: ((github-branch))
+
+  - name: version
+    type: semver
+    source:
+      bucket: ((s3-bucket-version))
+      initial_version: 1.0.0-rc.0
+      key: current-version
+      access_key_id: ((aws-access-key-id))
+      secret_access_key: ((aws-secret-access-key))
+      region_name: ((aws-region))
+      endpoint: ((s3-endpoint))
+      sse-kms-key-id: ((s3-sse-kms-key-id))
+
+  - name: candidate-release
+    type: s3
+    source:
+      bucket: ((s3-bucket-release-candidates))
+      regexp: ((application))-(.*).zip
+      access_key_id: ((aws-access-key-id))
+      secret_access_key: ((aws-secret-access-key))
+      region_name: ((aws-region))
+      endpoint: ((s3-endpoint))
+      sse-kms-key-id: ((s3-sse-kms-key-id))
