@@ -11,9 +11,10 @@ params:
   stage:
 
 inputs:
-  - name: candiate-release
+  - name: candidate-release
+
 run:
   path: source/ci/tasks/deploy.sh
   args: [
-    --input-dir, source
+    --input-dir, candidate-release
   ]

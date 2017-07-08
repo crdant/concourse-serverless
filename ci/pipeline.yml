@@ -11,7 +11,7 @@ resources:
       bucket: ((s3-bucket-version))
       initial_version: 1.0.0-rc.0
       key: current-version
-      access_key_id: ((aws-acccess-key-id))
+      access_key_id: ((aws-access-key-id))
       secret_access_key: ((aws-secret-access-key))
       region_name: ((aws-region))
       endpoint: ((s3-endpoint))
@@ -22,20 +22,9 @@ resources:
     source:
       bucket: ((s3-bucket-release-candidates))
       regexp: ((application))-(.*).zip
-      access_key_id: ((aws-acccess-key-id))
+      access_key_id: ((aws-access-key-id))
       secret_access_key: ((aws-secret-access-key))
       region_name: ((aws-region))
-      endpoint: ((s3-endpoint))
-      sse-kms-key-id: ((s3-sse-kms-key-id))
-
-  - name: final-release
-    type: s3
-    source:
-      bucket: ((s3-bucket-releases))
-      regexp: ((application))-(.*).tgz
-      access_key_id: ((s3-access-key-id))
-      secret_access_key: ((s3-secret-access-key))
-      region_name: ((s3-region))
       endpoint: ((s3-endpoint))
       sse-kms-key-id: ((s3-sse-kms-key-id))
 
@@ -52,7 +41,7 @@ jobs:
       - task: package
         file: source/ci/tasks/package.yml
         params:
-          aws_access_key_id: ((aws-acccess-key-id))
+          aws_access_key_id: ((aws-access-key-id))
           aws_secret_access_key: ((aws-secret-access-key))
           aws_region: ((aws-region))
           twilio_auth_token: ((twilio-auth-token))
@@ -63,7 +52,7 @@ jobs:
       - put: version
         params: { file: version/number }
 
-  - name: integration-test
+  - name: integration
     serial: true
     plan:
       - get: candidate-release
@@ -74,7 +63,7 @@ jobs:
       - get: version
         passed: [ build ]
       - task: deploy
-        file: source/ci/tasks/prepare-integration.yml
+        file: source/ci/tasks/deploy-candidate.yml
         params:
           stage: integration
       # - task: integration-test
