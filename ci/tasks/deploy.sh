@@ -35,4 +35,5 @@ fi
 package=`find ${inputDir} -name '*.zip'`
 echo "Deploying service in ${package}..."
 cd ${sourceDir}
+npm install
 node ./node_modules/serverless/bin/serverless deploy --stage ${stage} --package ${package}
