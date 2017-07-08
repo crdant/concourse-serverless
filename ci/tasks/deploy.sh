@@ -28,7 +28,7 @@ if [ ! -d "$inputDir" ]; then
   error_and_exit "missing input directory: $inputDir"
 fi
 
-echo Deploying service...
 package=`find ${inputDir} -name '*.zip'`
+echo "Deploying service in ${package}..."
 npm install -g serverless
 serverless deploy --stage ${stage} --package ${package}
