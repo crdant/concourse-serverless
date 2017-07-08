@@ -8,6 +8,8 @@ AWS_REGION=${aws_region}
 TWILIO_AUTH_TOKEN=${twilio_auth_token}
 TWILIO_ACOUNT_SID=${twilio_account_sid}
 
+env
+
 while [ $# -gt 0 ]; do
   case $1 in
     -i | --input-dir )
