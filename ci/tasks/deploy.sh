@@ -11,10 +11,6 @@ while [ $# -gt 0 ]; do
       inputDir=$2
       shift
       ;;
-    -i | --source-dir )
-      sourceDir=$2
-      shift
-      ;;
     * )
       echo "Unrecognized option: $1" 1>&2
       exit 1
@@ -34,6 +30,8 @@ fi
 
 package=`find ${inputDir} -name '*.zip'`
 echo "Deploying service in ${package}..."
-cd ${sourceDir}
-npm install
+service=`basename ${package} | cut -f1 d '.'`
+mkdir ${service}
+cd ${service}
+unzip ${package}
 node ./node_modules/serverless/bin/serverless deploy --stage ${stage} --package ${package}
