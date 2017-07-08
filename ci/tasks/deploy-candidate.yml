@@ -17,5 +17,6 @@ inputs:
 run:
   path: source/ci/tasks/deploy.sh
   args: [
-    --input-dir, candidate-release
+    --input-dir, candidate-release,
+    --source-dir, source
   ]
