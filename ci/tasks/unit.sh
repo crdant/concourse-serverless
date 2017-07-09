@@ -1,6 +1,7 @@
 #!/bin/sh
 
-inputDir=  
+inputDir=
+echo "script executed"
 
 while [ $# -gt 0 ]; do
   case $1 in
