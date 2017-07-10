@@ -49,10 +49,11 @@ version=`cat $versionFile`
 
 npm install -g serverless
 
+workingDir=`pwd`
 cd $inputDir
-packageDir="../${baseName}"
-serverless package --package ../${baseName}
-tar -czf ${outputDir}/${baseName}-${version}.tgz ${packageDir}
+serverless package --package "${workingDir}/${baseName}"
+cd $workingDir
+tar -czf ${outputDir}/${baseName}-${version}.tgz ${baseName}
 
 echo "Listing: "
 ls -l ${outputDir}/${baseName}-${version}.tgz
