@@ -6,40 +6,53 @@ jobs:
     plan:
       - get: source
         trigger: true
+      - get: serverless-image
+        trigger: true
       - get: version
         params: { pre: rc }
       - task: unit-test
         file: source/ci/tasks/unit.yml
-      - task: package
-        file: source/ci/tasks/package.yml
+
+  - name: package
+    serial: true
+    plan:
+      - get: source
+        trigger: true
+        passed: [build]
+      - get: version
+        passed: [ build ]
+      - put: serverless-package
         params:
-          aws_access_key_id: ((aws-access-key-id))
-          aws_secret_access_key: ((aws-secret-access-key))
-          aws_region: ((aws-region))
-          twilio_auth_token: ((twilio-auth-token))
-          twilio_account_sid: ((twilio-account-sid))
-          stage: dev
+          service: source
+      - task: pack
+        file: source/ci/tasks/pack.yml
+        params: { base_name: ((application)) }
       - put: candidate-release
-        params: { file: package/((application))-*.zip }
+        params: { file: archive/((application))-*.tgz }
       - put: version
-        params: { file: version/number }
+        params:
+          file: version/number
 
   - name: integration
     serial: true
     plan:
       - get: candidate-release
         trigger: true
-        passed: [ build ]
+        passed: [ package ]
       - get: source
-        passed: [ build ]
+        passed: [ package ]
       - get: version
-        passed: [ build ]
-      - task: deploy
-        file: source/ci/tasks/deploy-candidate.yml
+        passed: [ package ]
+      - task: unpack
+        file: source/ci/tasks/unpack.yml
+      - put: serverless-deployment
         params:
           stage: integration
+          deploy: true
+          package: unpacked
       # - task: integration-test
       #   file: source/ci/tasks/integration.yml
+
 
 resources:
   - name: source
@@ -64,9 +77,35 @@ resources:
     type: s3
     source:
       bucket: ((s3-bucket-release-candidates))
-      regexp: ((application))-(.*).zip
+      regexp: ((application))-(.*).tgz
       access_key_id: ((aws-access-key-id))
       secret_access_key: ((aws-secret-access-key))
       region_name: ((aws-region))
       endpoint: ((s3-endpoint))
       sse-kms-key-id: ((s3-sse-kms-key-id))
+
+  - name: serverless-package
+    type: serverless
+    source:
+      access_key_id: ((aws-access-key-id))
+      secret_access_key: ((aws-secret-access-key))
+      package: ((application))
+
+  - name: serverless-deployment
+    type: serverless
+    source:
+      access_key_id: ((aws-access-key-id))
+      secret_access_key: ((aws-secret-access-key))
+      package: ((application))
+      deploy: true
+
+  - name: serverless-image
+    type: docker-image
+    source:
+      repository: crdant/serverless-resource
+
+resource_types:
+  - name: serverless
+    type: docker-image
+    source:
+      repository: crdant/serverless-resource
