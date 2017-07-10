@@ -47,7 +47,13 @@ fi
 
 version=`cat $versionFile`
 
-tar -czf ${outputDir}/${baseName}-${version}.tgz ${inputDir}
+npm install -g serverless
+
+cd $inputDir
+packageDir="../${baseName}"
+serverless package --package ../${baseName}
+tar -czf ${outputDir}/${baseName}-${version}.tgz ${pacakgeDir}
+
 echo "Listing: "
 ls -l ${outputDir}/${baseName}-${version}.tgz
 echo "Contents: "

@@ -10,13 +10,12 @@ image_resource:
 inputs:
   - name: source
   - name: version
-  - name: serverless-package
 
 outputs:
   - name: archive
 
 run:
-  path: source/ci/tasks/pack.sh
+  path: source/ci/tasks/package.sh
   args: [
     --input-dir, serverless-package,
     --output-dir, archive,
