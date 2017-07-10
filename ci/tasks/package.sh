@@ -59,4 +59,3 @@ echo "Listing: "
 ls -l ${outputDir}/${baseName}-${version}.tgz
 echo "Contents: "
 tar -tzf ${outputDir}/${baseName}-${version}.tgz
-exit -1
