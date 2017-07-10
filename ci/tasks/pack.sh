@@ -47,4 +47,4 @@ fi
 
 version=`cat $versionFile`
 
-tar -cf ${outputDir}/${baseName}-${version}.tgz ${inputDir}
+tar -czf ${outputDir}/${baseName}-${version}.tgz ${inputDir}
