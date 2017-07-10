@@ -1,6 +1,6 @@
 #!/bin/sh
-
-inputDir=  outputDir=  versionFile= service=
+baseName=${base_name}
+inputDir=  outputDir=  versionFile=
 
 export AWS_ACCESS_KEY_ID=${aws_access_key_id}
 export AWS_SECRET_ACCESS_KEY=${aws_secret_access_key}
@@ -41,18 +41,10 @@ fi
 if [ ! -f "$versionFile" ]; then
   error_and_exit "missing version file: $versionFile"
 fi
+if [ -z "$baseName" ]; then
+  error_and_exit "missing base file name: $baseName"
+fi
 
 version=`cat $versionFile`
 
-working_dir=`pwd`
-cd $inputDir
-npm install
-
-echo Packaging service...
-node ./node_modules/serverless/bin/serverless package --package ${working_dir}/${outputDir}
-cd ${working_dir}
-
-package=`find ${outputDir} -name '*.zip'`
-service=`basename ${package} | cut  -f 1 -d '.'`
-
-mv ${outputDir}/${service}.zip ${outputDir}/${service}-${version}.zip
+tar -cf ${outputDir}/${baseName}-${version}.tgz ${inputDir}

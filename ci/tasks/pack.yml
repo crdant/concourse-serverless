@@ -1,0 +1,24 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: node
+    version: boron
+
+inputs:
+  - name: source
+  - name: version
+  - name: serverless-package
+
+outputs:
+  - name: archive
+
+run:
+  path: source/ci/tasks/pack.sh
+  args: [
+    --input-dir, serverless-package,
+    --output-dir, archive,
+    --version-file, version/number
+  ]
