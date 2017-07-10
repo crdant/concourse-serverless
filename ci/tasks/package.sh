@@ -52,7 +52,7 @@ npm install -g serverless
 cd $inputDir
 packageDir="../${baseName}"
 serverless package --package ../${baseName}
-tar -czf ${outputDir}/${baseName}-${version}.tgz ${pacakgeDir}
+tar -czf ${outputDir}/${baseName}-${version}.tgz ${packageDir}
 
 echo "Listing: "
 ls -l ${outputDir}/${baseName}-${version}.tgz
