@@ -31,5 +31,5 @@ if [ ! -d "$outputDir" ]; then
   error_and_exit "missing output directory: $outputDir"
 fi
 
-package=`find $inputDir -name "*.tar.gz"`
+package=`find $inputDir -name "*.tgz"`
 tar -C ${outputDir} -xzf ${package}
