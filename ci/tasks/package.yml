@@ -17,7 +17,7 @@ outputs:
 run:
   path: source/ci/tasks/package.sh
   args: [
-    --input-dir, serverless-package,
+    --input-dir, source,
     --output-dir, archive,
     --version-file, version/number
   ]
