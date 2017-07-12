@@ -12,26 +12,23 @@ jobs:
         params: { pre: rc }
       - task: unit-test
         file: source/ci/tasks/unit.yml
+      - put: version
+        params:
+          file: version/number
 
   - name: package
     serial: true
     plan:
       - get: source
-        trigger: true
         passed: [build]
       - get: version
+        trigger: true
         passed: [ build ]
-      - put: serverless-package
-        params:
-          service: source
-      - task: pack
-        file: source/ci/tasks/pack.yml
+      - task: package
+        file: source/ci/tasks/package.yml
         params: { base_name: ((application)) }
       - put: candidate-release
         params: { file: archive/((application))-*.tgz }
-      - put: version
-        params:
-          file: version/number
 
   - name: integration
     serial: true
@@ -48,8 +45,8 @@ jobs:
       - put: serverless-deployment
         params:
           stage: integration
-          deploy: true
-          package: unpacked
+          service: source
+          package: unpacked/((application))
       # - task: integration-test
       #   file: source/ci/tasks/integration.yml
 
@@ -84,20 +81,11 @@ resources:
       endpoint: ((s3-endpoint))
       sse-kms-key-id: ((s3-sse-kms-key-id))
 
-  - name: serverless-package
-    type: serverless
-    source:
-      access_key_id: ((aws-access-key-id))
-      secret_access_key: ((aws-secret-access-key))
-      package: ((application))
-
   - name: serverless-deployment
     type: serverless
     source:
-      access_key_id: ((aws-access-key-id))
-      secret_access_key: ((aws-secret-access-key))
-      package: ((application))
-      deploy: true
+      aws_access_key_id: ((aws-access-key-id))
+      aws_secret_access_key: ((aws-secret-access-key))
 
   - name: serverless-image
     type: docker-image
