@@ -49,6 +49,8 @@ version=`cat $versionFile`
 
 workingDir=`pwd`
 cd $inputDir
-serverless package --package "${workingDir}/${baseName}"
+echo serverless package --package "${workingDir}/${baseName}" --stage "${stage}"
+serverless package --package "${workingDir}/${baseName}" --stage "${stage}"
 cd $workingDir
+echo tar -czf ${outputDir}/${baseName}-${stage}-${version}.tgz ${baseName}
 tar -czf ${outputDir}/${baseName}-${stage}-${version}.tgz ${baseName}
