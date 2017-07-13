@@ -9,10 +9,10 @@ image_resource:
 
 params:
   stage:
-    
+
 inputs:
   - name: source
-  - name: candidate-release
+  - name: integration-candidate
 
 outputs:
   - name: unpacked
@@ -20,6 +20,6 @@ outputs:
 run:
   path: source/ci/tasks/unpack.sh
   args: [
-    --input-dir, candidate-release,
+    --input-dir, integration-candidate,
     --output-dir, unpacked,
   ]
