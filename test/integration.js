@@ -5,7 +5,7 @@ AWS.config.update({accessKeyId: process.env.AWS_ACCESS_KEY_ID, secretAccessKey: 
 
 var lambda = new AWS.Lambda();
 var params = {
-  FunctionName: 'concourse-serverless-dev-sendMessage', /* required */
+  FunctionName: "concourse-serverless-${process.env.stage}-sendMessage", /* required */
 };
 lambda.invoke(params, function(err, data) {
   if (err) {
