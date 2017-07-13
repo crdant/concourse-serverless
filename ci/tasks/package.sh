@@ -5,7 +5,7 @@ inputDir=  outputDir=  versionFile=
 env
 
 echo "was stage passed? "
-if [[ -n "${stage}" ]] then
+if [[ -n "${stage}" ]] ; then
   echo "Yes: ${stage}"
 else
   echo "No"
