@@ -1,7 +1,7 @@
 #!/bin/sh
 baseName=${base_name}
 stage=${serverless_stage}
-inputDir=  outputDir=  versionFile= stage=
+inputDir=  outputDir=  versionFile=
 
 env
 
