@@ -1,5 +1,4 @@
 #!/bin/sh
-stage=${serverless_stage}
 inputDir=  outputDir=
 
 while [ $# -gt 0 ]; do
