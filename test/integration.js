@@ -7,7 +7,7 @@ console.log("credentials: " + process.env.AWS_ACCESS_KEY_ID + ":" + process.env.
 
 var lambda = new AWS.Lambda();
 var params = {
-  FunctionName: process.env.service + process.env.stage + "-sendMessage" /* required */
+  FunctionName: process.env.service + "-" + process.env.stage + "-sendMessage" /* required */
 };
 lambda.invoke(params, function(err, data) {
   if (err) {
