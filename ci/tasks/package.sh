@@ -56,8 +56,3 @@ cd $inputDir
 serverless package --package "${workingDir}/${baseName}"
 cd $workingDir
 tar -czf ${outputDir}/${baseName}-${stage}-${version}.tgz ${baseName}
-
-echo "Listing: "
-ls -l ${outputDir}/${baseName}-${version}.tgz
-echo "Contents: "
-tar -tzf ${outputDir}/${baseName}-${version}.tgz
