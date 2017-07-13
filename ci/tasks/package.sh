@@ -1,10 +1,7 @@
 #!/bin/sh
 baseName=${base_name}
+stage=${serverless_stage}
 inputDir=  outputDir=  versionFile= stage=
-
-env
-
-echo "Stage: ${stage}"
 
 while [ $# -gt 0 ]; do
   case $1 in
