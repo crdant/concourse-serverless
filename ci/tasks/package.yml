@@ -6,6 +6,9 @@ image_resource:
   source:
     repository: crdant/serverless-image
 
+params:
+  stage:
+
 inputs:
   - name: source
   - name: version

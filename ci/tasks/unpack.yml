@@ -7,6 +7,9 @@ image_resource:
     repository: busybox
     tag: latest
 
+params:
+  stage:
+    
 inputs:
   - name: source
   - name: candidate-release
