@@ -20,7 +20,7 @@ while [ $# -gt 0 ]; do
       shift
       ;;
     -s | --stage )
-      versionFile=$2
+      stage=$2
       shift
       ;;
     * )
