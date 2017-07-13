@@ -1,9 +1,15 @@
 #!/bin/sh
 baseName=${base_name}
-stage=${serverless_stage}
 inputDir=  outputDir=  versionFile=
 
 env
+
+echo "was stage passed? "
+if [[ -n "${stage}" ]] then
+  echo "Yes: ${stage}"
+else
+  echo "No"
+fi
 
 while [ $# -gt 0 ]; do
   case $1 in
