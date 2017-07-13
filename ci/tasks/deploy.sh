@@ -34,4 +34,4 @@ service=`basename ${package} | cut -f1 d '.'`
 mkdir ${service}
 cd ${service}
 unzip ${package}
-node ./node_modules/serverless/bin/serverless deploy --stage ${stage} --package ${package}
+serverless deploy --stage ${stage} --package ${package}

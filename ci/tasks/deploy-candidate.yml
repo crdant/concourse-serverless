@@ -11,6 +11,7 @@ params:
   stage:
 
 inputs:
+  - name: source
   - name: candidate-release
 
 run:
