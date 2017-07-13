@@ -1,6 +1,6 @@
 #!/bin/sh
 baseName=${base_name}
-inputDir=  outputDir=  versionFile=
+inputDir=  outputDir=  versionFile= stage=
 
 export AWS_ACCESS_KEY_ID=${aws_access_key_id}
 export AWS_SECRET_ACCESS_KEY=${aws_secret_access_key}
@@ -16,6 +16,10 @@ while [ $# -gt 0 ]; do
       shift
       ;;
     -v | --version-file )
+      versionFile=$2
+      shift
+      ;;
+    -s | --stage )
       versionFile=$2
       shift
       ;;
@@ -47,13 +51,11 @@ fi
 
 version=`cat $versionFile`
 
-npm install -g serverless
-
 workingDir=`pwd`
 cd $inputDir
 serverless package --package "${workingDir}/${baseName}"
 cd $workingDir
-tar -czf ${outputDir}/${baseName}-${version}.tgz ${baseName}
+tar -czf ${outputDir}/${baseName}-${stage}-${version}.tgz ${baseName}
 
 echo "Listing: "
 ls -l ${outputDir}/${baseName}-${version}.tgz
