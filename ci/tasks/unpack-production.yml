@@ -1,0 +1,25 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: busybox
+    tag: latest
+
+params:
+  stage:
+
+inputs:
+  - name: source
+  - name: production-candidate
+
+outputs:
+  - name: unpacked
+
+run:
+  path: source/ci/tasks/unpack.sh
+  args: [
+    --input-dir, production-candidate,
+    --output-dir, unpacked,
+  ]
