@@ -35,4 +35,4 @@ service=`basename ${package} | cut -f1 d '.'`
 mkdir ${service}
 cd ${service}
 unzip ${package}
-serverless deploy --stage ${stage} --package ${package}
+serverless deploy --stage ${stage} --package ${package} --force --verbose
