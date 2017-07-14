@@ -24,33 +24,43 @@ jobs:
       - get: version
         trigger: true
         passed: [ build ]
-      - task: package
+      - task: package-integration
         file: source/ci/tasks/package.yml
         params:
           base_name: ((application))
           stage: integration
-      - task: package
+          aws_region: ((aws-region))
+          twilio_auth_token: ((twilio-auth-token))
+          twilio_account_sid: ((twilio-account-sid))
+      - put: integration-candidate
+        params:
+          file: archive/((application))-integration-*.tgz
+      - task: package-production
         file: source/ci/tasks/package.yml
         params:
           base_name: ((application))
           stage: production
-      - put: candidate-release
-        params: { file: archive/((application))-integration-*.tgz }
-      - put: candidate-release
-        params: { file: archive/((application))-production-*.tgz }
+          aws_region: ((aws-region))
+          twilio_auth_token: ((twilio-auth-token))
+          twilio_account_sid: ((twilio-account-sid))
+      - put: production-candidate
+        params:
+          file: archive/((application))-production-*.tgz
 
   - name: integration
     serial: true
     plan:
-      - get: candidate-release
+      - get: integration-candidate
         trigger: true
         passed: [ package ]
       - get: source
         passed: [ package ]
       - get: version
         passed: [ package ]
+      - get: production-candidate
+        passed: [ package ]
       - task: unpack
-        file: source/ci/tasks/unpack.yml
+        file: source/ci/tasks/unpack-integration.yml
         params:
           stage: integration
       - put: serverless-deployment
@@ -58,22 +68,27 @@ jobs:
           stage: integration
           service: source
           package: unpacked/((application))
+          env: { aws_region: "((aws-region))", twilio_auth_token: "((twilio-auth-token))", twilio_account_sid: "((twilio-account-sid))" }
       - task: integration-test
         file: source/ci/tasks/integration.yml
         params:
           stage: integration
+          service: ((application))
+          aws_access_key_id: ((aws-access-key-id))
+          aws_secret_access_key: ((aws-secret-access-key))
+          aws_region: ((aws-region))
 
   - name: ship-it
     serial_groups: [ version ]
     plan:
-      - get: candidate-release
+      - get: production-candidate
         passed: [ integration ]
       - get: source
         passed: [ integration ]
       - get: version
         params: { bump: final }
       - task: unpack
-        file: source/ci/tasks/unpack.yml
+        file: source/ci/tasks/unpack-production.yml
         params:
           stage: production
       - put: serverless-deployment
@@ -81,8 +96,9 @@ jobs:
           stage: production
           service: source
           package: unpacked/((application))
+          env: { aws_region: "((aws-region))", twilio_auth_token: "((twilio-auth-token))", twilio_account_sid: "((twilio-account-sid))" }
       - put: final-release
-        params: { file: release/((application))-*.tgz }
+        params: { file: production-candidate/((application))-production-*.tgz }
       - put: version
         params: { file: version/number }
 
@@ -105,11 +121,22 @@ resources:
       endpoint: ((s3-endpoint))
       sse-kms-key-id: ((s3-sse-kms-key-id))
 
-  - name: candidate-release
+  - name: integration-candidate
     type: s3
     source:
       bucket: ((s3-bucket-release-candidates))
-      regexp: ((application))-(.*).tgz
+      regexp: ((application))-integration-(.*).tgz
+      access_key_id: ((aws-access-key-id))
+      secret_access_key: ((aws-secret-access-key))
+      region_name: ((aws-region))
+      endpoint: s3.dualstack.((aws-region)).amazonaws.com
+      sse-kms-key-id: ((s3-sse-kms-key-id))
+
+  - name: production-candidate
+    type: s3
+    source:
+      bucket: ((s3-bucket-release-candidates))
+      regexp: ((application))-production-(.*).tgz
       access_key_id: ((aws-access-key-id))
       secret_access_key: ((aws-secret-access-key))
       region_name: ((aws-region))
@@ -120,7 +147,7 @@ resources:
     type: s3
     source:
       bucket: ((s3-bucket-releases))
-      regexp: ((application))-(.*).tgz
+      regexp: ((application))-production-(.*).tgz
       access_key_id: ((aws-access-key-id))
       secret_access_key: ((aws-secret-access-key))
       region_name: ((aws-region))
@@ -132,7 +159,7 @@ resources:
     source:
       aws_access_key_id: ((aws-access-key-id))
       aws_secret_access_key: ((aws-secret-access-key))
-      aww_region_name: ((aws-region))
+      aws_region: ((aws-region))
 
   - name: serverless-resource
     type: docker-image
