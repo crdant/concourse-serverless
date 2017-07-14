@@ -55,6 +55,7 @@ version=`cat $versionFile`
 
 workingDir=`pwd`
 cd $inputDir
+npm install
 echo serverless package --package "${workingDir}/${baseName}" --stage "${stage}"
 serverless package --package "${workingDir}/${baseName}" --stage "${stage}"
 cd $workingDir
