@@ -14,5 +14,5 @@ run:
   path: source/ci/tasks/unit.sh
   args: [
     --input-dir, source,
-    --module-cache, moduel-cache
+    --module-cache, module-cache
   ]
