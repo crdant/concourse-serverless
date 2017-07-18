@@ -14,6 +14,10 @@ while [ $# -gt 0 ]; do
       inputDir=$2
       shift
       ;;
+    -m | --module-cache )
+      moduleCache=$2
+      shift
+      ;;
     * )
       echo "Unrecognized option: $1" 1>&2
       exit 1
@@ -30,8 +34,11 @@ error_and_exit() {
 if [ ! -d "$inputDir" ]; then
   error_and_exit "missing input directory: $inputDir"
 fi
+if [ ! -d "$moduleCache" ]; then
+  error_and_exit "missing module cache directory: $moduleCache"
+fi
 
-cd $inputDir
+mv ${moduleCache}/node_modules ${inputDir}
+cd ${inputDir}
 
-npm install
 npm run integration

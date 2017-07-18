@@ -11,6 +11,7 @@ params:
 
 inputs:
   - name: source
+  - name: module-cache
   - name: version
 
 outputs:
@@ -20,6 +21,7 @@ run:
   path: source/ci/tasks/package.sh
   args: [
     --input-dir, source,
+    --module-cache, module-cache,
     --output-dir, archive,
     --version-file, version/number
   ]

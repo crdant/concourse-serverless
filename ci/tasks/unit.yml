@@ -8,9 +8,11 @@ image_resource:
 
 inputs:
   - name: source
+  - name: module-cache
 
 run:
   path: source/ci/tasks/unit.sh
   args: [
-    --input-dir, source
+    --input-dir, source,
+    --module-cache, moduel-cache
   ]

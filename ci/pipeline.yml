@@ -4,6 +4,8 @@ jobs:
   - name: build
     serial_groups: [ version ]
     plan:
+      - get: module-cache
+        trigger: true
       - get: source
         trigger: true
       - get: serverless-resource
@@ -19,8 +21,10 @@ jobs:
   - name: package
     serial: true
     plan:
+      - get: module-cache
+        passed: [ build ]
       - get: source
-        passed: [build]
+        passed: [ build ]
       - get: version
         trigger: true
         passed: [ build ]
@@ -52,6 +56,8 @@ jobs:
     plan:
       - get: integration-candidate
         trigger: true
+        passed: [ package ]
+      - get: module-cache
         passed: [ package ]
       - get: source
         passed: [ package ]
@@ -85,6 +91,8 @@ jobs:
         passed: [ integration ]
       - get: source
         passed: [ integration ]
+      - get: source
+        passed: [ integration ]
       - get: version
         params: { bump: final }
       - task: unpack
@@ -105,9 +113,17 @@ jobs:
 resources:
   - name: source
     type: git
-    source:
+    source: &service-source
       uri: ((github-uri))
       branch: ((github-branch))
+
+  - name: module-cache
+    type: npm-cache
+    source:
+      <<: *service-source
+      paths:
+        - package.json
+        - .npmrc
 
   - name: version
     type: semver
@@ -171,3 +187,9 @@ resource_types:
     type: docker-image
     source:
       repository: crdant/serverless-resource
+
+  - name: npm-cache
+    type: docker-image
+    source:
+      repository: ymedlop/npm-cache-resource
+      tag: latest

@@ -1,6 +1,6 @@
 #!/bin/sh
 baseName=${base_name}
-inputDir=  outputDir=  versionFile=
+inputDir=  outputDir=  moduleCache= versionFile=
 
 env
 
@@ -19,6 +19,10 @@ while [ $# -gt 0 ]; do
       ;;
     -o | --output-dir )
       outputDir=$2
+      shift
+      ;;
+    -m | --module-cache )
+      moduleCache=$2
       shift
       ;;
     -v | --version-file )
@@ -44,6 +48,10 @@ fi
 if [ ! -d "$outputDir" ]; then
   error_and_exit "missing output directory: $outputDir"
 fi
+if [ ! -d "$moduleCache" ]; then
+  error_and_exit "missing module cache directory: $moduleCache"
+fi
+
 if [ ! -f "$versionFile" ]; then
   error_and_exit "missing version file: $versionFile"
 fi
@@ -54,8 +62,9 @@ fi
 version=`cat $versionFile`
 
 workingDir=`pwd`
-cd $inputDir
-npm install
+mv ${moduleCache}/node_modules ${inputDir}
+cd ${inputDir}
+
 echo serverless package --package "${workingDir}/${baseName}" --stage "${stage}"
 serverless package --package "${workingDir}/${baseName}" --stage "${stage}"
 cd $workingDir
