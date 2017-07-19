@@ -5,51 +5,51 @@ jobs:
     serial_groups: [ version ]
     plan:
       - get: module-cache
-        trigger: true
       - get: source
         trigger: true
       - get: serverless-resource
         trigger: true
-      - get: version
-        params: { pre: rc }
       - task: unit-test
         file: source/ci/tasks/unit.yml
-      - put: version
-        params:
-          file: version/number
 
   - name: package
     serial: true
     plan:
+      - get: version
+        params: { pre: rc }
       - get: module-cache
         passed: [ build ]
       - get: source
-        passed: [ build ]
-      - get: version
         trigger: true
         passed: [ build ]
-      - task: package-integration
-        file: source/ci/tasks/package.yml
+      - aggregate:
+        - do:
+          - task: package-integration
+            file: source/ci/tasks/package.yml
+            params:
+              base_name: ((application))
+              stage: integration
+              aws_region: ((aws-region))
+              twilio_auth_token: ((twilio-auth-token))
+              twilio_account_sid: ((twilio-account-sid))
+          - put: integration-candidate
+            params:
+              file: archive/((application))-integration-*.tgz
+        - do:
+          - task: package-production
+            file: source/ci/tasks/package.yml
+            params:
+              base_name: ((application))
+              stage: production
+              aws_region: ((aws-region))
+              twilio_auth_token: ((twilio-auth-token))
+              twilio_account_sid: ((twilio-account-sid))
+          - put: production-candidate
+            params:
+              file: archive/((application))-production-*.tgz
+      - put: version
         params:
-          base_name: ((application))
-          stage: integration
-          aws_region: ((aws-region))
-          twilio_auth_token: ((twilio-auth-token))
-          twilio_account_sid: ((twilio-account-sid))
-      - put: integration-candidate
-        params:
-          file: archive/((application))-integration-*.tgz
-      - task: package-production
-        file: source/ci/tasks/package.yml
-        params:
-          base_name: ((application))
-          stage: production
-          aws_region: ((aws-region))
-          twilio_auth_token: ((twilio-auth-token))
-          twilio_account_sid: ((twilio-account-sid))
-      - put: production-candidate
-        params:
-          file: archive/((application))-production-*.tgz
+          file: version/number
 
   - name: integration
     serial: true
