@@ -1,7 +1,8 @@
 #!/bin/sh
 
-inputDir= moduleCache
-echo "script executed"
+inputDir= moduleCache=
+
+set -e
 
 while [ $# -gt 0 ]; do
   case $1 in
