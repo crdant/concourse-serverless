@@ -7,7 +7,7 @@ AWS.config.update({accessKeyId: process.env.AWS_ACCESS_KEY_ID, secretAccessKey: 
 if ( process.env.http_proxy ) {
   AWS.config.update({
     httpOptions: {
-      agent: proxy(process.env.http_proxy);
+      agent: proxy(process.env.http_proxy)
     }
   });
 }
