@@ -89,7 +89,7 @@ jobs:
     plan:
       - get: production-candidate
         passed: [ integration ]
-      - get: source
+      - get: module-cache
         passed: [ integration ]
       - get: source
         passed: [ integration ]
