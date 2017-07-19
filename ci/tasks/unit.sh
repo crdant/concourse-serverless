@@ -1,6 +1,6 @@
 #!/bin/sh
 
-inputDir=
+inputDir= moduleCache
 echo "script executed"
 
 while [ $# -gt 0 ]; do
@@ -30,8 +30,8 @@ if [ ! -d "$inputDir" ]; then
   error_and_exit "missing input directory: $inputDir"
 fi
 
-if [ ! -d "$moduleDir" ]; then
-  error_and_exit "missing input directory: $moduleDir"
+if [ ! -d "$moduleCache" ]; then
+  error_and_exit "missing module cache directory: $moduleCache"
 fi
 
 mv ${moduleCache}/node_modules ${inputDir}
