@@ -8,6 +8,7 @@
   "version": "1.0.0",
   "devDependencies": {
     "aws-sdk": "^2.82.0",
+    "proxy-agent": "^2.0.0",
     "mocha": "^3.4.2",
     "serverless": "^1.17.0"
   },

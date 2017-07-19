@@ -95,6 +95,7 @@ jobs:
         passed: [ integration ]
       - get: version
         params: { bump: final }
+        passed: [ integration ]
       - task: unpack
         file: source/ci/tasks/unpack-production.yml
         params:
